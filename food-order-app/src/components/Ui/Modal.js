@@ -1,3 +1,4 @@
+import ReactDom from "react-dom";
 import classes from "./Modal.module.css";
 
 // Dark backdrop for the modal
@@ -14,9 +15,20 @@ const ModalOverlay = (props) => {
   );
 };
 
+// Html element being used to portal modal
+const portalElement = document.getElementById("overlay");
+
 // Actual Modal
-const Modal = () => {
-  return <div>Modal</div>;
+const Modal = (props) => {
+  return (
+    <>
+      {ReactDom.createPortal(<Backdrop />, portalElement)}
+      {ReactDom.createPortal(
+        <ModalOverlay>{props.children}</ModalOverlay>,
+        portalElement
+      )}
+    </>
+  );
 };
 
 export default Modal;
