@@ -8,6 +8,8 @@ const Cart = (props) => {
 
   const totalAmount = cartContext.totalAmount.toFixed(2);
 
+  const hasItems = cartContext.items.length > 0;
+
   const cartItems = (
     <ul className={classes["cart-items"]}>
       {cartContext.items.map((item) => (
@@ -27,7 +29,7 @@ const Cart = (props) => {
         <button className={classes["button--alt"]} onClick={props.onHideCart}>
           Close
         </button>
-        <button className={classes.button}>Order</button>
+        {hasItems && <button className={classes.button}>Order</button>}
       </div>
     </Modal>
   );
