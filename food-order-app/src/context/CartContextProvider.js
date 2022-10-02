@@ -14,6 +14,11 @@ const cartReducer = (state, action) => {
   if (action.type === "ADD_ITEM") {
     // rather than modifying the old array, concat returns a new array
     const updatedItems = state.items.concat(action.item);
+
+    // find the index of the item added to the cart
+    const existingCartIndex = state.items.findIndex(
+      (item) => item.id === action.item.id
+    );
     // calculate the total value of cart items
     const updatedTotalAmount =
       state.totalAmount + action.item.price * action.item.amount;
