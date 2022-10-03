@@ -11,6 +11,11 @@ const defaultCartState = {
 
 // cart reducer function
 const cartReducer = (state, action) => {
+  /* 
+      Check to see if an item is already in the cart, 
+      if so, update the quantity and price of cart
+      else, add the item to the cart
+    */
   if (action.type === "ADD_ITEM") {
     // find the index of the item added to the cart
     const existingCartItemIndex = state.items.findIndex(
@@ -20,11 +25,8 @@ const cartReducer = (state, action) => {
     // find if an item in the cart exists with the matching id
     const existingCartItem = state.items[existingCartItemIndex];
 
-    /* 
-      Check to see if an item is already in the cart, 
-      if so, update the quantity and price of cart
-      else, add the item to the cart
-    */
+    // check to see if the item exists and update quantity,
+    // or add a new item to the cart
     let updatedItems;
     if (existingCartItem) {
       const updatedItem = {
@@ -40,6 +42,34 @@ const cartReducer = (state, action) => {
     // calculate the total value of cart items
     const updatedTotalAmount =
       state.totalAmount + action.item.price * action.item.amount;
+    return {
+      items: updatedItems,
+      totalAmount: updatedTotalAmount,
+    };
+  }
+
+  /*
+    Reducing the amount of item in the cart,
+    if the amount === 0, 
+    then the item is removed from the cart instead.
+  */
+  if (action.type === "REMOVE_ITEM") {
+    // find the index of the item added to the cart
+    const existingCartItemIndex = state.items.findIndex(
+      (item) => item.id === action.id
+    );
+    // find the item using the item index
+    const existingItem = state.items[existingCartItemIndex];
+    const updatedTotalAmount = state.totalAmount - existingItem.price;
+
+    let updatedItems;
+    if (existingItem.amount === 1) {
+      updatedItems = state.items.filter((item) => item.id !== action.id);
+    } else {
+      const updatedItem = { ...existingItem, amount: existingItem.amount - 1 };
+      updatedItems = [...state.items];
+      updatedItems[existingCartItemIndex] = updatedItem;
+    }
     return {
       items: updatedItems,
       totalAmount: updatedTotalAmount,
