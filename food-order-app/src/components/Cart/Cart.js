@@ -11,7 +11,9 @@ const Cart = (props) => {
 
   const hasItems = cartContext.items.length > 0;
 
-  const addItemToCartHandler = (item) => {};
+  const addItemToCartHandler = (item) => {
+    cartContext.addItem({ ...item, amount: 1 });
+  };
 
   const removeItemFromCartHandler = (id) => {};
 
