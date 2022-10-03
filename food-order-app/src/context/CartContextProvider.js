@@ -67,7 +67,12 @@ const CartContextProvider = (props) => {
   };
 
   // remove an item from the cart
-  const removeItemFromCartHandler = (id) => {};
+  const removeItemFromCartHandler = (id) => {
+    dispatchCartAction({
+      type: "REMOVE_ITEM",
+      id: id,
+    });
+  };
 
   // cart content which will be provided and updated
   const cartContext = {
