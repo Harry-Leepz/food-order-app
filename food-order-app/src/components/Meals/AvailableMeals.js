@@ -1,17 +1,24 @@
+import { useEffect, useState } from "react";
 import Card from "../Ui/Card";
 import MealItem from "./MealItem/MealItem";
 import classes from "./AvailableMeals.module.css";
-import { useEffect, useState } from "react";
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState();
 
   useEffect(() => {
     const fetchMeals = async () => {
       const response = await fetch(
         "https://react-customhooks-87d57-default-rtdb.europe-west1.firebasedatabase.app/meals.json"
       );
+
+      // error handling
+      if (!response.ok) {
+        throw new Error("Something went wrong! :(");
+      }
+
       const data = await response.json();
 
       // Firebase specific => trasform object data into array.
@@ -27,13 +34,25 @@ const AvailableMeals = () => {
       setMeals(loadedMeals);
       setIsLoading(false);
     };
-    fetchMeals();
+
+    fetchMeals().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
   }, []);
 
-  if (isLoading === true) {
+  if (isLoading) {
     return (
       <section className={classes.loading}>
         <p>Loading Meals</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className={classes.loading}>
+        <p>{error}</p>
       </section>
     );
   }
