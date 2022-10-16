@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import classes from "./Checkout.module.css";
 
+const isEmpty = (value) => value.trim() === "";
+
 const Checkout = (props) => {
   const nameInput = useRef();
   const streetInput = useRef();
@@ -10,10 +12,25 @@ const Checkout = (props) => {
   const onSubmitHandler = (event) => {
     event.preventDefault();
 
+    // get form input values
     const enteredName = nameInput.current.value;
     const enteredStreet = streetInput.current.value;
     const enteredPostal = postalInput.current.value;
     const enteredCity = cityInput.current.value;
+
+    // check if values are not empty strings
+    const nameIsValid = !isEmpty(enteredName);
+    const streetIsValid = !isEmpty(enteredStreet);
+    const postalIsValid = !isEmpty(enteredPostal);
+    const cityIsValid = !isEmpty(enteredCity);
+
+    // conditional to check form is valid
+    const formIsValid =
+      nameIsValid && streetIsValid && postalIsValid && cityIsValid;
+
+    if (!formIsValid) {
+      return;
+    }
   };
 
   return (
