@@ -7,6 +7,8 @@ import Checkout from "./Checkout";
 
 const Cart = (props) => {
   const [isCheckout, setIsCheckout] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
   const cartContext = useContext(CartContext);
 
   const totalAmount = cartContext.totalAmount.toFixed(2);
@@ -40,8 +42,9 @@ const Cart = (props) => {
     setIsCheckout(true);
   };
 
-  const submitOrderHandler = (userData) => {
-    fetch(
+  const submitOrderHandler = async (userData) => {
+    setIsSubmitting(true);
+    await fetch(
       "https://react-customhooks-87d57-default-rtdb.europe-west1.firebasedatabase.app/orders.json",
       {
         method: "POST",
@@ -51,6 +54,8 @@ const Cart = (props) => {
         }),
       }
     );
+    setIsSubmitting(false);
+    setDidSubmit(true);
   };
 
   const modalActions = (
