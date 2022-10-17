@@ -71,8 +71,8 @@ const Cart = (props) => {
     </div>
   );
 
-  return (
-    <Modal onHideCart={props.onHideCart}>
+  const cartModalcontent = (
+    <>
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount</span>
@@ -82,6 +82,18 @@ const Cart = (props) => {
         <Checkout onConfirm={submitOrderHandler} onClose={props.onHideCart} />
       )}
       {!isCheckout && modalActions}
+    </>
+  );
+
+  const isSubmittingModalContent = <p>Sending order data...</p>;
+
+  const didSubmitModalContent = <p>Successfully sent the order!</p>;
+
+  return (
+    <Modal onHideCart={props.onHideCart}>
+      {!isSubmitting && !didSubmit && cartModalcontent}
+      {isSubmitting && isSubmittingModalContent}
+      {didSubmit && didSubmitModalContent}
     </Modal>
   );
 };
