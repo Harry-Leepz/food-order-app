@@ -40,6 +40,19 @@ const Cart = (props) => {
     setIsCheckout(true);
   };
 
+  const submitOrderHandler = (userData) => {
+    fetch(
+      "https://react-customhooks-87d57-default-rtdb.europe-west1.firebasedatabase.app/orders.json",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          user: userData,
+          cart: cartContext.items,
+        }),
+      }
+    );
+  };
+
   const modalActions = (
     <div className={classes.actions}>
       <button className={classes["button--alt"]} onClick={props.onHideCart}>
@@ -60,7 +73,9 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>${totalAmount}</span>
       </div>
-      {isCheckout && <Checkout onClose={props.onHideCart} />}
+      {isCheckout && (
+        <Checkout onConfirm={submitOrderHandler} onClose={props.onHideCart} />
+      )}
       {!isCheckout && modalActions}
     </Modal>
   );
